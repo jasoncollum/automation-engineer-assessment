@@ -1,30 +1,45 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
+# Automation Engineer Assessment
 ## Description
+### Scenario:
+You are given an API that manages user data for a small application. The API has endpoints for creating a user, retrieving all users, retrieving a user by ID, updating a user, and deleting a user.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Task:
+Write integration tests for the following API endpoints using JavaScript and any testing framework of your choice (e.g., Jest, Mocha):
+
+- POST /users - Create a new user
+  - Test that a valid user is created successfully and returns a 201 status code.
+  - Test input validation: sending invalid data should return a 400 status code.
+  - Test handling of duplicate users (email needs to be unique).
+
+- GET /users
+    - Test that it returns all users with a 200 status code.
+    - Test that it returns an empty array if no users are found.
+
+- GET /users/{id} - Retrieve a user by ID
+  - Test that it returns the correct user details with a 200 status code.
+  - Test that it returns a 404 status code if the user is not found.
+
+- PATCH /users/{id} - Update a user
+  - Test updating user details successfully returns a 204 status code.
+  - Test that the user details are updated correctly.
+  - Test that it handles non-existing users by returning a 404 status code.
+  - Test input validation (e.g., invalid email format should return a 400 status code).
+
+- DELETE /users/{id} - Delete a user
+  - Test successful deletion returns a 204 status code.
+  - Test deletion of a non-existing user returns a 404 status code.
+
+### Instructions:
+- Write clear and concise tests, ensuring they are independent of each other.
+- Use async/await for handling asynchronous operations.
+- Include comments explaining the purpose of each test case.
+- Provide setup and teardown methods for your test cases if needed.
+
+### Submission Requirements:
+- Fork this repository and commit your code to your fork.
+- Add @mikeulvila as a collaborator to your forked repository.
+- Ensure all tests pass successfully.
+- Document any assumptions made during the testing process.
 
 ## Installation
 
@@ -45,18 +60,6 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## Support
 
