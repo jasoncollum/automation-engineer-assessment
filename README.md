@@ -60,6 +60,15 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Running the tests
+
+```bash
+# unit tests
+npm run test:cov
+
+# e2e tests
+npm run test:e2e
+```
 
 ## Support
 
