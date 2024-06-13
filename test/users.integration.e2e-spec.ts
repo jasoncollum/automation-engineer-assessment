@@ -9,8 +9,7 @@ describe('Users Integration', () => {
   let usersService: UsersService;
 
   // resusable test data
-  const newUser = { name: 'Test User', email: 'testuser@email.com' };
-  const userId = 25;
+  const testUser = { id: 25, name: 'Test User', email: 'testuser@email.com' };
   const invalidEmail = { email: 'testuser' };
   const multipleUsers = [
     { id: 31, name: 'Test User 1', email: 'testuser1@email.com' },
@@ -42,11 +41,14 @@ describe('Users Integration', () => {
     it('should create a new user - return the user and a 201 status code', () => {
       return request(app.getHttpServer())
         .post('/users')
-        .send(newUser)
+        .send({
+          name: testUser.name,
+          email: testUser.email,
+        })
         .expect(201)
         .expect(({ body }) => {
-          expect(body.name).toEqual(newUser.name);
-          expect(body.email).toEqual(newUser.email);
+          expect(body.name).toEqual(testUser.name);
+          expect(body.email).toEqual(testUser.email);
           expect(typeof body.id).toBe('number');
         });
     });
@@ -55,7 +57,7 @@ describe('Users Integration', () => {
       return request(app.getHttpServer())
         .post('/users')
         .send({
-          name: 'Test User',
+          name: testUser.name,
           email: 'testuser',
         })
         .expect(400);
@@ -67,18 +69,21 @@ describe('Users Integration', () => {
         .post('/users')
         .send({
           name: 123,
-          email: 'testuser@email.com',
+          email: testUser.email,
         })
         .expect(400);
     });
 
     it('should return error if duplicate email', () => {
       // populate users array with a user
-      usersService.users.push({ ...newUser, id: userId });
+      usersService.users.push(testUser);
 
       return request(app.getHttpServer())
         .post('/users')
-        .send(newUser)
+        .send({
+          name: 'userName',
+          email: testUser.email,
+        })
         .expect(({ body }) => {
           expect(body.message).toEqual('User already exists');
         });
@@ -116,13 +121,13 @@ describe('Users Integration', () => {
 
     it('should return correct user details and 200 status code', () => {
       // populate users array with a user
-      usersService.users.push({ ...newUser, id: userId });
+      usersService.users.push(testUser);
 
       return request(app.getHttpServer())
-        .get(`/users/${userId}`)
+        .get(`/users/${testUser.id}`)
         .expect(200)
         .expect(({ body }) => {
-          expect(body).toEqual({ ...newUser, id: userId });
+          expect(body).toEqual(testUser);
         });
     });
 
@@ -141,27 +146,27 @@ describe('Users Integration', () => {
     // NOTE:  async/await in order to make GET request after PATCH (as UsersService does not return updated user)
     it('should update a user and return a 204 status code and confirm updated details', async () => {
       // populate users array with a user to update
-      usersService.users.push({ ...newUser, id: userId });
+      usersService.users.push(testUser);
 
-      const updatedUser = { name: 'Updated Name', email: 'updated@email.com' };
+      const updatedUserData = { name: 'Updated Name', email: 'updated@email.com' };
 
       await request(app.getHttpServer())
-        .patch(`/users/${userId}`)
-        .send(updatedUser)
+        .patch(`/users/${testUser.id}`)
+        .send(updatedUserData)
         .expect(204);
 
       return request(app.getHttpServer())
-        .get(`/users/${userId}`)
+        .get(`/users/${testUser.id}`)
         .expect(({ body }) => {
-          expect(body).toEqual({ ...updatedUser, id: userId });
+          expect(body).toEqual({ ...updatedUserData, id: testUser.id });
         });
     });
 
     it('should return a 404 status code and error message if user id not found', () => {
-      const updatedUserData = { name: 'Test User', email: 'updated@email.com' };
+      const updatedUserData = { name: 'Updated Name', email: 'updated@email.com' };
 
       return request(app.getHttpServer())
-        .patch(`/users/${userId}`)
+        .patch(`/users/${testUser.id}`)
         .send(updatedUserData)
         .expect(404)
         .expect(({ body }) => {
@@ -171,10 +176,10 @@ describe('Users Integration', () => {
 
     it('should return a 400 status code if invalid email', () => {
       // populate users array with a user to update
-      usersService.users.push({ ...newUser, id: userId });
+      usersService.users.push(testUser);
 
       return request(app.getHttpServer())
-        .patch(`/users/${userId}`)
+        .patch(`/users/${testUser.id}`)
         .send(invalidEmail)
         .expect(400);
     });
@@ -182,22 +187,22 @@ describe('Users Integration', () => {
     it('should return a 400 status code if invalid name (name must be a string)', () => {
       // NOTE:  name can be an empty string (of any length) as CreateUserDto only requires that name be a string
       // populate users array with a user to update
-      usersService.users.push({ ...newUser, id: userId });
+      usersService.users.push(testUser);
 
       return request(app.getHttpServer())
-        .patch(`/users/${userId}`)
+        .patch(`/users/${testUser.id}`)
         .send({ name: 123 })
         .expect(400);
     });
 
     it('should return error message if duplicate email', () => {
       // populate users array with a user to update
-      usersService.users.push({ ...newUser, id: userId });
+      usersService.users.push(testUser);
 
-      const existingEmail = { email: newUser.email };
+      const existingEmail = { email: testUser.email };
 
       return request(app.getHttpServer())
-        .patch(`/users/${userId}`)
+        .patch(`/users/${testUser.id}`)
         .send(existingEmail)
         .expect(({ body }) => {
           expect(body.message).toEqual('Update failed');
@@ -210,15 +215,15 @@ describe('Users Integration', () => {
 
     it('should delete user, return a 204 status code and confirm user deleted', async () => {
       // populate users array with multiple users
-      usersService.users.push(...multipleUsers, { ...newUser, id: userId });
+      usersService.users.push(...multipleUsers, testUser);
 
       await request(app.getHttpServer())
-        .delete(`/users/${userId}`)
+        .delete(`/users/${testUser.id}`)
         .expect(204);
 
       // confirm deletion
       return request(app.getHttpServer())
-        .get(`/users/${userId}`)
+        .get(`/users/${testUser.id}`)
         .expect(404);
     });
 
