@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../src/app.module';
 import { UsersService } from '../src/users/users.service';
+import { UsersModule } from '../src/users/users.module';
 
 describe('Users Integration', () => {
   let app: INestApplication;
@@ -20,7 +20,7 @@ describe('Users Integration', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [UsersModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
