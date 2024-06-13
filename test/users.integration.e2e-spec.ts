@@ -47,9 +47,11 @@ describe('Users Integration', () => {
         })
         .expect(201)
         .expect(({ body }) => {
-          expect(body.name).toEqual(testUser.name);
-          expect(body.email).toEqual(testUser.email);
-          expect(typeof body.id).toBe('number');
+          expect(body).toEqual({
+            id: expect.any(Number),
+            name: testUser.name,
+            email: testUser.email,
+          })
         });
     });
 
