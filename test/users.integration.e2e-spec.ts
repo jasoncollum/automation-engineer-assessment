@@ -74,7 +74,7 @@ describe('Users Integration', () => {
 
     it('should return error if duplicate email', () => {
       // populate users array with a user
-      usersService.users = [{ ...newUser, id: userId }];
+      usersService.users.push({ ...newUser, id: userId });
 
       return request(app.getHttpServer())
         .post('/users')
@@ -90,7 +90,7 @@ describe('Users Integration', () => {
 
     it('should return an array of all users', () => {
       // populate users array with multiple users
-      usersService.users = multipleUsers;
+      usersService.users.push(...multipleUsers);
 
       return request(app.getHttpServer())
         .get('/users')
@@ -116,7 +116,7 @@ describe('Users Integration', () => {
 
     it('should return correct user details and 200 status code', () => {
       // populate users array with a user
-      usersService.users = [{ ...newUser, id: userId }];
+      usersService.users.push({ ...newUser, id: userId });
 
       return request(app.getHttpServer())
         .get(`/users/${userId}`)
@@ -141,7 +141,7 @@ describe('Users Integration', () => {
     // NOTE:  async/await in order to make GET request after PATCH (as UsersService does not return updated user)
     it('should update a user and return a 204 status code and confirm updated details', async () => {
       // populate users array with a user to update
-      usersService.users = [{ ...newUser, id: userId }];
+      usersService.users.push({ ...newUser, id: userId });
 
       const updatedUser = { name: 'Updated Name', email: 'updated@email.com' };
 
@@ -171,7 +171,7 @@ describe('Users Integration', () => {
 
     it('should return a 400 status code if invalid email', () => {
       // populate users array with a user to update
-      usersService.users = [{ ...newUser, id: userId }];
+      usersService.users.push({ ...newUser, id: userId });
 
       return request(app.getHttpServer())
         .patch(`/users/${userId}`)
@@ -182,7 +182,7 @@ describe('Users Integration', () => {
     it('should return a 400 status code if invalid name (name must be a string)', () => {
       // NOTE:  name can be an empty string (of any length) as CreateUserDto only requires that name be a string
       // populate users array with a user to update
-      usersService.users = [{ ...newUser, id: userId }];
+      usersService.users.push({ ...newUser, id: userId });
 
       return request(app.getHttpServer())
         .patch(`/users/${userId}`)
@@ -192,7 +192,7 @@ describe('Users Integration', () => {
 
     it('should return error message if duplicate email', () => {
       // populate users array with a user to update
-      usersService.users = [{ ...newUser, id: userId }];
+      usersService.users.push({ ...newUser, id: userId });
 
       const existingEmail = { email: newUser.email };
 
@@ -210,7 +210,7 @@ describe('Users Integration', () => {
 
     it('should delete user, return a 204 status code and confirm user deleted', async () => {
       // populate users array with multiple users
-      usersService.users = [...multipleUsers, { ...newUser, id: userId }];
+      usersService.users.push(...multipleUsers, { ...newUser, id: userId });
 
       await request(app.getHttpServer())
         .delete(`/users/${userId}`)
