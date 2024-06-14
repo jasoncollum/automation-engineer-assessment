@@ -10,12 +10,6 @@ describe('UsersService', () => {
 
   // resusable test data
   const testUser: User = { id: 25, name: 'Test User', email: 'testuser@email.com' };
-  const invalidEmail = { email: 'testuser' };
-  const multipleUsers = [
-    { id: 31, name: 'Test User 1', email: 'testuser1@email.com' },
-    { id: 32, name: 'Test User 2', email: 'testuser2@email.com' },
-    { id: 33, name: 'Test User 2', email: 'testuser2@email.com' },
-  ];
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -133,7 +127,7 @@ describe('UsersService', () => {
     it('should delete user with given id', () => {
       service.users = [testUser];
 
-      service.remove(25);
+      service.remove(testUser.id);
 
       const result = service.findAll();
 
